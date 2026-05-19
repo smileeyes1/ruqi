@@ -6,6 +6,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * الواجهة الرئيسية للتطبيق (Dashboard)
+ * مركز التحكم في جميع محركات النظام
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -14,6 +18,9 @@ public class MainActivity extends AppCompatActivity {
         renderDashboard();
     }
 
+    /**
+     * بناء واجهة لوحة التحكم المركزية برمجياً (Code-Based UI)
+     */
     public void renderDashboard() {
         LinearLayout root = UIFactory.createRootLayout(this);
         root.addView(UIFactory.createHeader(this, "لوحة تحكم رقي المركزية"));
@@ -22,17 +29,20 @@ public class MainActivity extends AppCompatActivity {
         root.addView(UIFactory.createMenuButton(this, "إدارة المنهاج", v -> CurriculumEngine.launch(this)));
         root.addView(UIFactory.createMenuButton(this, "لوحة المعلم البديل", v -> TeacherEngine.launch(this)));
         root.addView(UIFactory.createMenuButton(this, "المساعد الذكي (AI)", v -> AIEngine.launch(this)));
+        root.addView(UIFactory.createMenuButton(this, "إدارة الخطط والتحاضير", v -> PlanningEngine.launch(this)));
 
         setContentView(root);
     }
 
-    // استقبال نتيجة اختيار الملف وحفظ المسار في DatabaseEngine
+    /**
+     * معالجة نتائج استيراد الملفات
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ImportEngine.REQUEST_CODE_PDF && resultCode == RESULT_OK) {
             if (data != null && data.getData() != null) {
-                // حفظ المسار في قاعدة البيانات المحلية
+                // حفظ المسار في قاعدة البيانات المحلية للرجوع إليه لاحقاً
                 String uriString = data.getData().toString();
                 DatabaseEngine.save(this, "CurriculumURI", uriString);
                 
@@ -43,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // العودة دائماً للوحة التحكم الرئيسية
+        // ضمان العودة دائماً للوحة التحكم الرئيسية بدلاً من إغلاق التطبيق
         renderDashboard();
     }
 }
