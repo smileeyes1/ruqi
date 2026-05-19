@@ -17,9 +17,17 @@ public class CurriculumEngine {
             }
         }));
 
-        // خيارات عرض المنهاج
-        layout.addView(UIFactory.createMenuButton(context, "عرض المنهاج المحمل", v -> 
-            Toast.makeText(context, "لا يوجد منهاج محمل حالياً", Toast.LENGTH_SHORT).show()));
+        // زر عرض المنهاج المحمل (يقرأ من قاعدة البيانات)
+        layout.addView(UIFactory.createMenuButton(context, "عرض المنهاج المحمل", v -> {
+            String savedUri = DatabaseEngine.load(context, "CurriculumURI");
+            
+            if (savedUri.equals("لا توجد بيانات محفوظة")) {
+                Toast.makeText(context, "لا يوجد منهاج محمل حالياً", Toast.LENGTH_SHORT).show();
+            } else {
+                // هنا سيتم ربط ViewerEngine لاحقاً
+                Toast.makeText(context, "تم العثور على الملف، جارٍ التحضير للعرض...", Toast.LENGTH_LONG).show();
+            }
+        }));
 
         if (context instanceof MainActivity) {
             ((MainActivity) context).setContentView(layout);
