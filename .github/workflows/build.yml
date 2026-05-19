@@ -18,7 +18,7 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: 8.2
-        cache-disabled: false # يفضل إبقاء الإعداد الافتراضي والاعتماد على ريبوت الخادم
+        cache-disabled: true
 
     - name: Inject & Repair Gradle Wrapper Binaries
       run: gradle wrapper --gradle-version 8.2
