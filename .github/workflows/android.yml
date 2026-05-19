@@ -21,7 +21,9 @@ jobs:
         cache: 'npm'
 
     - name: Clean Install Production Dependencies
-      run: npm ci || npm install
+      run: |
+        npm install
+        npm install @capacitor/core @capacitor/cli @capacitor/android
 
     - name: Setup Java Development Kit v17 Enterprise
       uses: actions/setup-java@v4
@@ -40,20 +42,23 @@ jobs:
         echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" > ${ANDROID_HOME}/licenses/android-sdk-license
         echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > ${ANDROID_HOME}/licenses/android-sdk-preview-license
 
-    - name: Initialize Android Native Target Scaffold
+    - name: Initialize or Sync Capacitor Native Android Scaffold
       run: |
-        npx cap init "Ruqi OS Pro" "com.ruqi.educationalos" --web-dir=www || true
-        npx cap add android || true
-
-    - name: Synchronize Web Static Files to Native Container
-      run: npx cap sync android
+        if [ ! -d "android" ]; then
+          npx cap init "Ruqi OS Pro" "com.ruqi.educationalos" --web-dir=www
+          npx cap add android
+        fi
+        npx cap sync android
 
     - name: Apply Execution Security Overlays to Gradle
-      run: chmod +x android/gradlew
+      run: |
+        if [ -f "android/gradlew" ]; then
+          chmod +x android/gradlew
+        fi
 
     - name: Build Application Packaging Debug APK
-      working-directory: ./android
-      run: ./gradlew assembleDebug
+      run: |
+        cd android && ./gradlew assembleDebug
 
     - name: Upload Finished Production Artifacts
       uses: actions/upload-artifact@v4
