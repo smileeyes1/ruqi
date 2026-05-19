@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="dark_background">#121212</color>
-    <color name="surface_card">#1E1E1E</color>
-    <color name="neon_cyan">#00E5FF</color>
-    <color name="text_white">#FFFFFF</color>
-    <color name="text_gray">#AAAAAA</color>
-</resources>
