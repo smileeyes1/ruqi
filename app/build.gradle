@@ -13,7 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        // ربط مفتاح Gemini API من GitHub Secrets تلقائياً
+        // ربط مفتاح Gemini API من GitHub Secrets
         buildConfigField "String", "GEMINI_API_KEY", "\"${System.getenv("GEMINI_API_KEY") ?: "NO_KEY"}\""
     }
 
@@ -24,10 +24,6 @@ android {
 
     buildFeatures {
         buildConfig true
-    }
-
-    lint {
-        abortOnError false
     }
 }
 
