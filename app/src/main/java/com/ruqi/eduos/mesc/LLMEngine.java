@@ -1,5 +1,6 @@
 package com.ruqi.eduos.mesc;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import java.io.OutputStream;
@@ -8,15 +9,21 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class LLMEngine {
-    // ضع هنا عنوان IP الخاص بجهاز الكمبيوتر الذي يعمل عليه Ollama
-    private static final String SERVER_URL = "http://192.168.1.10:11434/api/generate";
 
     public interface Callback { void onResponse(String result); }
 
-    public static void generate(String prompt, Callback callback) {
+    public static void generate(Context context, String prompt, Callback callback) {
+        // جلب العنوان من قاعدة البيانات
+        String serverUrl = DatabaseEngine.load(context, "SERVER_URL");
+        if (serverUrl.equals("لا توجد بيانات محفوظة")) {
+            serverUrl = "http://10.0.2.2:11434/api/generate"; // الافتراضي للذكاء التلقائي
+        }
+
+        final String finalUrl = serverUrl;
+
         new Thread(() -> {
             try {
-                URL url = new URL(SERVER_URL);
+                URL url = new URL(finalUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
@@ -35,7 +42,7 @@ public class LLMEngine {
 
                 new Handler(Looper.getMainLooper()).post(() -> callback.onResponse(response.toString()));
             } catch (Exception e) {
-                new Handler(Looper.getMainLooper()).post(() -> callback.onResponse("خطأ اتصال: " + e.getMessage()));
+                new Handler(Looper.getMainLooper()).post(() -> callback.onResponse("خطأ: تأكد من تشغيل Ollama وسلامة العنوان: " + e.getMessage()));
             }
         }).start();
     }
