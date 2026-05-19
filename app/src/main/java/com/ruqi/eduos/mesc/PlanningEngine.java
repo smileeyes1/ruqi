@@ -1,33 +1,28 @@
 package com.ruqi.eduos.mesc;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.view.View;
 
 public class PlanningEngine {
     public static void launch(Context context) {
         LinearLayout layout = UIFactory.createRootLayout(context);
-        layout.addView(UIFactory.createHeader(context, "توليد التحضير الذكي"));
+        layout.addView(UIFactory.createHeader(context, "التحضير الذكي"));
 
-        final EditText etTopic = UIFactory.createInputField(context, "موضوع الدرس...");
-        layout.addView(etTopic);
+        final EditText et = UIFactory.createInputField(context, "اكتب موضوع الدرس...");
+        layout.addView(et);
 
         final ProgressBar loader = new ProgressBar(context);
         loader.setVisibility(View.GONE);
         layout.addView(loader);
 
         layout.addView(UIFactory.createMenuButton(context, "توليد", v -> {
-            String topic = etTopic.getText().toString();
-            if (topic.isEmpty()) return;
             loader.setVisibility(View.VISIBLE);
-
-            // الاستدعاء الذكي
-            AIProcessor.generate(context, "اكتب تحضير درس: " + topic, result -> {
+            AIOrchestrator.process(context, et.getText().toString(), result -> {
                 loader.setVisibility(View.GONE);
-                DatabaseEngine.save(context, "LAST_PLAN", result);
-                PrintEngine.printText(context, "التحضير: " + topic, result);
+                // هنا سيتم لاحقاً ربط PrintEngine
             });
         }));
 
