@@ -1,0 +1,10 @@
+{
+  "appId": "com.ruqi.educationalos",
+  "appName": "Ruqi OS",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "hostname": "ruqi.app",
+    "allowNavigation": []
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "ruqi-integrated-educational-os",
+  "version": "2.0.0",
+  "description": "Production Safe Flattened Ruqi Educational OS",
+  "main": "www/index.html",
+  "type": "module",
+  "scripts": {
+    "build": "npx cap sync android"
+  }
+}
