@@ -12,18 +12,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # ١. جلب الكود المصدري من المستودع
+      # ١. جلب الكود المصدري للمشروع
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      # ٢. تهيئة بيئة Node.js لتشغيل حزم الإعدادات
+      # ٢. تهيئة بيئة Node.js لتشغيل الحزم
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      # ٣. تثبيت الاعتمادات والمكتبات بدقة صارمة دون تضارب
+      # ٣. تثبيت اعتمادات ومكتبات كاباسيتور الخاصة بمشروع Ruqi
       - name: Install Project Dependencies
         run: |
           npm install
@@ -36,10 +36,10 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      # ٥. مزامنة وتحويل كود الويب (www) إلى تطبيق أندرويد تلقائياً
+      # ٥. مزامنة وتحويل كود الويب (www) إلى تطبيق أندرويد تلقائياً لمشروع Ruqi
       - name: Capacitor Android Sync
         run: |
-          npx cap init "Teacher App" "com.smileeyes1.teacher" --web-dir=www || true
+          npx cap init "Ruqi App" "com.smileeyes1.ruqi" --web-dir=www || true
           npx cap add android || true
           npx cap sync android
 
@@ -59,7 +59,7 @@ jobs:
       - name: Export Output Application Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Zaytouna-Smart-Classroom-APK
+          name: Ruqi-Smart-App-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
 
@@ -74,7 +74,7 @@ jobs:
             exit 0
           fi
           echo "جاري سحب تقرير الخطأ وتحليله برمجياً عبر جيميني..."
-          ERROR_CONTEXT="GitHub Actions build pipeline failed during Android compilation setup."
+          ERROR_CONTEXT="GitHub Actions build pipeline failed during Android compilation setup for Ruqi project."
           PAYLOAD=$(jq -n --arg msg "$ERROR_CONTEXT" '{contents: [{parts: [{text: ("Analyze this Android build execution failure and provide a single clean code fix: " + $msg)}]}]}')
           RESPONSE=$(curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}" \
             -H "Content-Type: application/json" \
