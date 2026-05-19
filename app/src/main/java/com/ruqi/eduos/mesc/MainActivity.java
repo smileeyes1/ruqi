@@ -1,62 +1,45 @@
 package com.ruqi.eduos.mesc;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-/**
- * المتحكم المركزي لنظام رقي (Ruqi EduOS)
- * يقوم بربط المحركات المستقلة (Engines) بالواجهات (UIFactory)
- */
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        // بناء لوحة التحكم الرئيسية
         renderDashboard();
     }
 
-    /**
-     * دالة بناء واجهة لوحة التحكم
-     * يتم استدعاؤها عند التشغيل أو عند العودة من المحركات
-     */
-    private void renderDashboard() {
-        // 1. بناء الحاوية الأساسية
+    public void renderDashboard() {
         LinearLayout root = UIFactory.createRootLayout(this);
-        
-        // 2. إضافة الترويسة
         root.addView(UIFactory.createHeader(this, "لوحة تحكم رقي المركزية"));
-        
-        // 3. إضافة أزرار الربط مع المحركات
-        
-        // زر محرك المنهاج
-        root.addView(UIFactory.createMenuButton(this, "إدارة المنهاج", v -> {
-            CurriculumEngine.launch(this);
-        }));
 
-        // زر محرك المعلم
-        root.addView(UIFactory.createMenuButton(this, "لوحة المعلم البديل", v -> {
-            TeacherEngine.launch(this);
-        }));
+        // ربط المحركات
+        root.addView(UIFactory.createMenuButton(this, "إدارة المنهاج", v -> CurriculumEngine.launch(this)));
+        root.addView(UIFactory.createMenuButton(this, "لوحة المعلم البديل", v -> TeacherEngine.launch(this)));
+        root.addView(UIFactory.createMenuButton(this, "المساعد الذكي (AI)", v -> AIEngine.launch(this)));
 
-        // زر محرك الذكاء الاصطناعي
-        root.addView(UIFactory.createMenuButton(this, "المساعد الذكي (AI)", v -> {
-            AIEngine.launch(this);
-        }));
-
-        // تعيين الواجهة
         setContentView(root);
     }
 
-    /**
-     * الحماية والتحكم عند الضغط على زر الرجوع
-     */
+    // استقبال نتيجة اختيار الملف
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ImportEngine.REQUEST_CODE_PDF && resultCode == RESULT_OK) {
+            if (data != null) {
+                Toast.makeText(this, "تم استلام الملف بنجاح", Toast.LENGTH_SHORT).show();
+                // هنا يمكن إضافة كود لمعالجة الملف مستقبلاً
+            }
+        }
+    }
+
     @Override
     public void onBackPressed() {
-        // إذا كان المستخدم داخل أحد المحركات، نعيده للوحة التحكم الرئيسية
-        // استخدام recreate() هو الحل الأكثر استقراراً في هذه المرحلة
         renderDashboard();
     }
 }
