@@ -18,14 +18,18 @@ public class PlanningEngine {
         loader.setVisibility(View.GONE);
         layout.addView(loader);
 
+        // هذا هو الجزء الذي قمنا بتعديله ليربط التوليد بالطباعة مباشرة
         layout.addView(UIFactory.createMenuButton(context, "توليد", v -> {
             loader.setVisibility(View.VISIBLE);
             AIOrchestrator.process(context, et.getText().toString(), result -> {
                 loader.setVisibility(View.GONE);
-                // هنا سيتم لاحقاً ربط PrintEngine
+                // الربط التلقائي: النتيجة تذهب مباشرة للمعاينة والطباعة
+                PrintEngine.showPreview(context, result);
             });
         }));
 
-        if (context instanceof MainActivity) ((MainActivity) context).setContentView(layout);
+        if (context instanceof MainActivity) {
+            ((MainActivity) context).setContentView(layout);
+        }
     }
 }
