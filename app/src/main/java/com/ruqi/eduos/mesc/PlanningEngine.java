@@ -8,23 +8,30 @@ import android.widget.Toast;
 public class PlanningEngine {
     public static void launch(Context context) {
         LinearLayout layout = UIFactory.createRootLayout(context);
-        layout.addView(UIFactory.createHeader(context, "المخطط الذكي"));
+        layout.addView(UIFactory.createHeader(context, "التحضير الذكي (AI)"));
 
-        final EditText etTopic = UIFactory.createInputField(context, "موضوع الدرس...");
+        final EditText etTopic = UIFactory.createInputField(context, "اكتب موضوع الدرس...");
         layout.addView(etTopic);
 
-        layout.addView(UIFactory.createMenuButton(context, "توليد الخطة الذكية", v -> {
+        layout.addView(UIFactory.createMenuButton(context, "توليد بالذكاء الاصطناعي", v -> {
             String topic = etTopic.getText().toString();
             if (topic.isEmpty()) {
-                Toast.makeText(context, "يجب تحديد الموضوع", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "اكتب موضوعاً أولاً", Toast.LENGTH_SHORT).show();
                 return;
             }
-            // استدعاء الذكاء الهجين
-            HybridAIManager.generateContent(context, topic, result -> {
-                PrintEngine.printText(context, "تحضير: " + topic, result);
+            
+            // طلب التحضير من الذكاء الاصطناعي
+            String prompt = "اكتب تحضير درس بعنوان " + topic + " يتضمن: الهدف، الاستراتيجية، التقييم.";
+            
+            Toast.makeText(context, "جاري التفكير...", Toast.LENGTH_SHORT).show();
+            
+            LLMEngine.generate(prompt, result -> {
+                PrintEngine.printText(context, "نتيجة الذكاء الاصطناعي", result);
             });
         }));
 
-        if (context instanceof MainActivity) ((MainActivity) context).setContentView(layout);
+        if (context instanceof MainActivity) {
+            ((MainActivity) context).setContentView(layout);
+        }
     }
 }
