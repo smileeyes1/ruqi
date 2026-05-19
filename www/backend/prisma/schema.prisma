@@ -1,0 +1,97 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// تصنيفات السلوك القائم على القيم وبناء الشخصية التربوية
+enum BehaviorCategory {
+  ETHICAL_VALUE      // سلوك قيمي وأخلاقي (أمانة، تعاون، مبادرة)
+  ACADEMIC_EFFORT    // جهد أكاديمي متميز
+  DISRUPTIVE         // سلوك يحتاج إلى توجيه وتعديل مباشر
+}
+
+// مستويات التدرج الثلاثي الصارم للمنهاج الفلسطيني
+enum QuestionType {
+  CONCRETE_VISUAL    // محسوس (رسومات، شطب، عناصر بصرية)
+  SEMI_CONCRETE      // شبه محسوس (مسائل لفظية وسياقات بيئية)
+  ABSTRACT_SYMBOL    // مجرد (رموز، أرقام وحساب بحت)
+}
+
+// كتل المستأجرين (عزل المدارس والمؤسسات سحابياً)
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String   // اسم المدرسة أو المديرية
+  code      String   @unique // كود ترخيص المنصة
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+// سجل الحضور والغياب اللحظي الموحد لتقليص وقت الحصة
+model Attendance {
+  id         String   @id @default(uuid())
+  tenantId   String
+  classId    String
+  studentId  String
+  date       DateTime @db.Date
+  isPresent  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  @@unique([studentId, date]) 
+  @@index([tenantId, classId])
+}
+
+// سجل الرصد السلوكي القيمي الأخلاقي لبناء شخصية الطالب
+model BehaviorLog {
+  id          String           @id @default(uuid())
+  tenantId    String
+  teacherId   String
+  studentId   String
+  category    BehaviorCategory
+  points      Int              @default(١) 
+  description String           
+  createdAt   DateTime         @default(now())
+
+  @@index([tenantId, studentId])
+}
+
+// مخزن المناهج والوحدات والأسئلة الشامل للمنهاج الفلسطيني
+model QuestionBank {
+  id          String       @id @default(uuid())
+  tenantId    String
+  teacherId   String
+  subject     String       // المبحث (مثال: الرياضيات)
+  grade       String       // الصف (الاول، الثاني...)
+  type        QuestionType @default(ABSTRACT_SYMBOL)
+  content     String       // نص السؤال بالأرقام العربية حصراً ٠١٢٣٤٥٦٧٨٩
+  visualAsset String?      // رابط الرسمة البصرية للأسئلة المحسوسة
+  answerKey   String       // مفتاح الإجابة الصحيحة للتصحيح الآلي
+  createdAt   DateTime     @default(now())
+
+  @@index([tenantId, subject, grade])
+}
+
+// محرك الامتحانات وأوراق العمل والدرجات
+model Assessment {
+  id         String   @id @default(uuid())
+  tenantId   String
+  classId    String
+  title      String   // عنوان الورقة (متن نظيف للطلاب للطباعة)
+  maxMarks   Int      @default(١٠)
+  questions  Json     // مصفوفة الأسئلة المتدرجة والمحمية
+  createdAt  DateTime @default(now())
+}
+
+model StudentGrade {
+  id           String   @id @default(uuid())
+  assessmentId String
+  studentId    String
+  obtainedMarks Float
+  feedback     String?  // تغذية راجعة قيمية تربوية مباشرة للطالب
+  createdAt    DateTime @default(now())
+
+  @@unique([assessmentId, studentId])
+}
