@@ -4,33 +4,29 @@ import android.content.Context;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.view.View;
 
 public class PlanningEngine {
     public static void launch(Context context) {
         LinearLayout layout = UIFactory.createRootLayout(context);
-        layout.addView(UIFactory.createHeader(context, "التحضير الذكي"));
+        layout.addView(UIFactory.createHeader(context, "توليد التحضير الذكي"));
 
         final EditText etTopic = UIFactory.createInputField(context, "موضوع الدرس...");
         layout.addView(etTopic);
 
-        // مؤشر تحميل مخفي
         final ProgressBar loader = new ProgressBar(context);
-        loader.setVisibility(android.view.View.GONE);
+        loader.setVisibility(View.GONE);
         layout.addView(loader);
 
-        layout.addView(UIFactory.createMenuButton(context, "توليد التحضير", v -> {
+        layout.addView(UIFactory.createMenuButton(context, "توليد", v -> {
             String topic = etTopic.getText().toString();
             if (topic.isEmpty()) return;
+            loader.setVisibility(View.VISIBLE);
 
-            loader.setVisibility(android.view.View.VISIBLE); // إظهار المؤشر
-            
-            LLMEngine.generate(context, "اكتب تحضير درس: " + topic, result -> {
-                loader.setVisibility(android.view.View.GONE); // إخفاء المؤشر
-                
-                // حفظ النتيجة في قاعدة البيانات للرجوع إليها
+            // الاستدعاء الذكي
+            AIProcessor.generate(context, "اكتب تحضير درس: " + topic, result -> {
+                loader.setVisibility(View.GONE);
                 DatabaseEngine.save(context, "LAST_PLAN", result);
-                
                 PrintEngine.printText(context, "التحضير: " + topic, result);
             });
         }));
