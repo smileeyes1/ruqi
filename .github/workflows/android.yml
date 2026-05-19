@@ -2,9 +2,12 @@ name: Build Android APK Production
 on:
   push:
     branches: [ main ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # إجبار البيئة على تشغيل الـ Actions المتوافقة مع Node 24 لمنع التنبيهات وإيقاف الدعم
     steps:
     - name: Checkout Source Code
       uses: actions/checkout@v4
@@ -12,7 +15,7 @@ jobs:
     - name: Setup Node.js Runtime Environment
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20' # يمكنك ترقيتها إلى '22' أو '24' لاحقاً إذا كانت مكتبات مشروعك تدعم ذلك
 
     - name: Install Project Dependencies
       run: npm install
