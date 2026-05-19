@@ -17,15 +17,15 @@ public class CurriculumEngine {
             }
         }));
 
-        // زر عرض المنهاج المحمل (يقرأ من قاعدة البيانات)
+        // زر عرض المنهاج (مربوط بالمحرك المصحح)
         layout.addView(UIFactory.createMenuButton(context, "عرض المنهاج المحمل", v -> {
             String savedUri = DatabaseEngine.load(context, "CurriculumURI");
             
             if (savedUri.equals("لا توجد بيانات محفوظة")) {
                 Toast.makeText(context, "لا يوجد منهاج محمل حالياً", Toast.LENGTH_SHORT).show();
             } else {
-                // هنا سيتم ربط ViewerEngine لاحقاً
-                Toast.makeText(context, "تم العثور على الملف، جارٍ التحضير للعرض...", Toast.LENGTH_LONG).show();
+                // نداء محرك العرض المصحح
+                ViewerEngine.launch(context, savedUri);
             }
         }));
 
