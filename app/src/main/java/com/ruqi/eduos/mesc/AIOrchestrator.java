@@ -5,14 +5,17 @@ import android.os.Handler;
 import android.os.Looper;
 
 public class AIOrchestrator {
-    
+    private static final String SYSTEM_CONTEXT = 
+        "أنت مساعد معلم خبير بالمنهاج الفلسطيني. اتبع التدرج التربوي (محسوس-شبه محسوس-مجرد). " +
+        "استخدم الأرقام المشرقية. كن مباشراً وعملياً.";
+
     public static void process(Context context, String prompt, AIProcessor.Callback callback) {
-        // تشغيل في خلفية لمنع توقف الواجهة (NetworkOnMainThreadException)
+        String fullPrompt = SYSTEM_CONTEXT + "\n" + "المهمة: " + prompt;
+        
         new Thread(() -> {
-            String result = GeminiClient.sendMessage(prompt);
-            // العودة لـ UI Thread لتحديث الواجهة
+            String result = GeminiClient.sendMessage(fullPrompt);
             new Handler(Looper.getMainLooper()).post(() -> {
-                callback.onResponse(result);
+                if (callback != null) callback.onResponse(result);
             });
         }).start();
     }
