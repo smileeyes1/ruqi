@@ -7,6 +7,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // تم تفريغ استدعاء الواجهة المؤقتة لضمان نجاح تجميع التطبيق أولاً
+        // استدعاء تصميم لوحة التحكم مباشرة عند تشغيل التطبيق
+        setContentView(R.layout.activity_main);
     }
 }
