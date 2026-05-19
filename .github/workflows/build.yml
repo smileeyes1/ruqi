@@ -18,18 +18,15 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: gradle
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x RuqiEduOS_MESC/gradlew
-
-    - name: Build with Gradle
-      run: |
-        cd RuqiEduOS_MESC
-        ./gradlew assembleDebug
+    - name: Setup Gradle and Build
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: '8.2'
+        arguments: assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: RuqiEduOS-Debug-APK
-        path: RuqiEduOS_MESC/app/build/outputs/apk/debug/app-debug.apk
+        path: app/build/outputs/apk/debug/app-debug.apk
