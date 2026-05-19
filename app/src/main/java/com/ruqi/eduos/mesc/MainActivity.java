@@ -1,46 +1,49 @@
 package com.ruqi.eduos.mesc;
 
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
+    private LinearLayout chatHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        // تسجيل الميزات ذاتياً
+
         CommandRegistry.register(new LessonPlanCommand());
 
-        // بناء الواجهة برمجياً (Zero XML)
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(32, 32, 32, 32);
-
+        ScrollView scrollView = new ScrollView(this);
+        chatHistory = new LinearLayout(this);
+        chatHistory.setOrientation(LinearLayout.VERTICAL);
+        
         EditText inputField = new EditText(this);
-        inputField.setHint("اكتب موضوع الدرس...");
+        inputField.setHint("اكتب طلبك أو قل لي ماذا تريد...");
+        
+        Button sendBtn = new Button(this);
+        sendBtn.setText("تنفيذ");
 
-        Button btnPrepare = new Button(this);
-        btnPrepare.setText("تحضير الدرس");
-
-        TextView resultView = new TextView(this);
-
-        btnPrepare.setOnClickListener(v -> {
-            AppCommand cmd = CommandRegistry.getCommand("تحضير");
-            if (cmd != null) {
-                resultView.setText("جاري التحضير...");
-                cmd.execute(this, inputField.getText().toString(), resultView::setText);
-            }
+        sendBtn.setOnClickListener(v -> {
+            String text = inputField.getText().toString();
+            addMessage("أنت: " + text);
+            SmartDispatcher.dispatch(this, text, this::addMessage);
+            inputField.setText("");
         });
 
-        layout.addView(inputField);
-        layout.addView(btnPrepare);
-        layout.addView(resultView);
+        LinearLayout mainLayout = new LinearLayout(this);
+        mainLayout.setOrientation(LinearLayout.VERTICAL);
+        mainLayout.addView(scrollView);
+        scrollView.addView(chatHistory);
+        mainLayout.addView(inputField);
+        mainLayout.addView(sendBtn);
 
-        setContentView(layout);
+        setContentView(mainLayout);
+    }
+
+    private void addMessage(String msg) {
+        TextView tv = new TextView(this);
+        tv.setText(msg);
+        tv.setPadding(16, 16, 16, 16);
+        chatHistory.addView(tv);
     }
 }
