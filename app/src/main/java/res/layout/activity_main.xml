@@ -1,77 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/dark_background"
-    android:padding="24dp"
-    android:layoutDirection="rtl">
+    android:background="#121212"
+    android:padding="16dp">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/headerArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="24dp">
+        
         <TextView
-            android:id="@+id/appTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textColor="@color/neon_cyan"
+            android:text="Ruqi EduOS • لوحة التحكم"
+            android:textColor="#00E5FF"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:layout_alignParentStart="true" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/kernel_status"
-            android:textColor="@color/text_gray"
-            android:textSize="12sp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
+            android:gravity="right" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/surface_card"
+        android:layout_below="@id/headerArea"
+        android:background="#1E1E1E"
         android:orientation="vertical"
         android:padding="20dp"
-        android:layout_marginBottom="16dp">
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/lesson_title"
-            android:textColor="@color/text_white"
+            android:text="مرحباً بك في نظام إدارة الصف الذكي"
+            android:textColor="#FFFFFF"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="12dp"
+            android:gravity="center" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/concrete_stage"
-            android:textColor="@color/neon_cyan"
-            android:textSize="14sp"
-            android:layout_marginBottom="16dp"/>
-
-        <TextView
-            android:id="@+id/mathQuestionText"
+        <Button
+            android:id="@+id/btnStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/math_question"
-            android:textColor="@color/text_white"
-            android:textSize="32sp"
-            android:gravity="center"
-            android:layout_marginVertical="24dp"/>
+            android:backgroundTint="#00E5FF"
+            android:text="ابدأ تفعيل الحصة الاستكشافية"
+            android:textColor="#121212"
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="مؤشرات استقرار الحصة الحية: مستقرة عتاديًا"
-        android:textColor="@color/text_gray"
-        android:textSize="12sp"
-        android:layout_marginTop="auto"
-        android:layout_gravity="center" />
-</LinearLayout>
+</RelativeLayout>
