@@ -1,19 +1,21 @@
 package com.ruqi.eduos.mesc;
 
 import android.content.Context;
-import android.content.Intent;
 import android.print.PrintAttributes;
 import android.print.PrintManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 public class PrintEngine {
 
     public static void printText(Context context, String title, String content) {
-        // إنشاء WebView مؤقت لتحويل النص إلى تنسيق طباعة
         WebView webView = new WebView(context);
-        String htmlData = "<html><body><h1>" + title + "</h1><p>" + content.replace("\n", "<br>") + "</p></body></html>";
+        
+        // قمنا بإضافة dir='rtl' ومحاذاة النصوص لليمين (text-align: right)
+        String htmlData = "<html dir='rtl'><body style='font-family: Arial, sans-serif; text-align: right; margin: 20px;'>" +
+                          "<h1 style='color: #000;'>" + title + "</h1>" +
+                          "<p style='font-size: 16px; line-height: 1.6;'>" + content.replace("\n", "<br>") + "</p>" +
+                          "</body></html>";
         
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -27,6 +29,7 @@ public class PrintEngine {
 
     private static void createPrintJob(Context context, WebView webView) {
         PrintManager printManager = (PrintManager) context.getSystemService(Context.PRINT_SERVICE);
+        // إعدادات الطباعة الافتراضية
         printManager.print("Ruqi_Document", webView.createPrintDocumentAdapter(), new PrintAttributes.Builder().build());
     }
 }
