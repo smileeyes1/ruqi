@@ -15,4 +15,9 @@ public class DatabaseEngine {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         return pref.getString(key, "لا توجد بيانات محفوظة");
     }
+
+    // الدالة الجديدة التي يحتاجها مشروعك
+    public static String getApiKey(Context context) {
+        return load(context, "API_KEY");
+    }
 }
