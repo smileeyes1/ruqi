@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>نظام رقي التعليمي الذكي | Ruqi OS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="os-header print-hide">
+        <div class="header-title">منصة رقي التعليمية الرقمية 🌟</div>
+        <nav id="main-nav" class="nav-container">
+            <button id="btn-home" class="active" onclick="RuqiOS.navigate('home')">واجهة الطالب</button>
+            <button id="btn-teacher" onclick="RuqiOS.navigate('teacher')">بوابة المعلم</button>
+        </nav>
+    </header>
+
+    <main id="app-root" class="main-content"></main>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
