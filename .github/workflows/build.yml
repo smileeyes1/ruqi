@@ -21,13 +21,15 @@ jobs:
         cache: gradle
 
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: chmod +x RuqiEduOS_MESC/gradlew
 
     - name: Build with Gradle
-      run: ./gradlew assembleDebug
+      run: |
+        cd RuqiEduOS_MESC
+        ./gradlew assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: RuqiEduOS-Debug-APK
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: RuqiEduOS_MESC/app/build/outputs/apk/debug/app-debug.apk
