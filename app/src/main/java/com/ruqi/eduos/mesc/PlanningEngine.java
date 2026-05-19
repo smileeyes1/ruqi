@@ -10,7 +10,7 @@ public class PlanningEngine {
         LinearLayout layout = UIFactory.createRootLayout(context);
         layout.addView(UIFactory.createHeader(context, "التحضير الذكي (AI)"));
 
-        final EditText etTopic = UIFactory.createInputField(context, "اكتب موضوع الدرس...");
+        final EditText etTopic = UIFactory.createInputField(context, "موضوع الدرس...");
         layout.addView(etTopic);
 
         layout.addView(UIFactory.createMenuButton(context, "توليد بالذكاء الاصطناعي", v -> {
@@ -20,12 +20,10 @@ public class PlanningEngine {
                 return;
             }
             
-            // طلب التحضير من الذكاء الاصطناعي
-            String prompt = "اكتب تحضير درس بعنوان " + topic + " يتضمن: الهدف، الاستراتيجية، التقييم.";
+            Toast.makeText(context, "جاري التواصل مع العقل الاصطناعي...", Toast.LENGTH_SHORT).show();
             
-            Toast.makeText(context, "جاري التفكير...", Toast.LENGTH_SHORT).show();
-            
-            LLMEngine.generate(prompt, result -> {
+            // الربط مع المحرك الذكي
+            LLMEngine.generate(context, "اكتب تحضيراً لدرس " + topic + "، يتضمن: الهدف، الاستراتيجية، التقييم.", result -> {
                 PrintEngine.printText(context, "نتيجة الذكاء الاصطناعي", result);
             });
         }));
