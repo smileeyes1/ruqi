@@ -6,26 +6,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AIEngine {
-    
+
     public static void launch(Context context) {
+        // بناء الواجهة
         LinearLayout layout = UIFactory.createRootLayout(context);
-        layout.addView(UIFactory.createHeader(context, "المساعد الذكي (تحضير الدرس)"));
+        layout.addView(UIFactory.createHeader(context, "المساعد الذكي (AI)"));
 
-        // منطق تعليمي: التدرج من المحسوس إلى المجرد
-        String lessonPlan = "عنوان الدرس: جمع الأعداد.\n\n" +
-                            "١. المحسوس: استخدام مكعبات العد.\n" +
-                            "٢. شبه المحسوس: رسم دوائر على السبورة.\n" +
-                            "٣. المجرد: كتابة المعادلة الرقمية (٤+٢=٦).";
+        // مثال لتحضير
+        String lessonContent = "الدرس: الجمع\nالهدف: التدرج من المحسوس للمجرد.";
 
+        // عرض نص التحضير
         TextView tvPlan = new TextView(context);
-        tvPlan.setText(lessonPlan);
+        tvPlan.setText(lessonContent);
         tvPlan.setTextColor(android.graphics.Color.LTGRAY);
         tvPlan.setPadding(0, 20, 0, 40);
         layout.addView(tvPlan);
 
-        layout.addView(UIFactory.createMenuButton(context, "توليد نشاط تفاعلي", v -> 
-            Toast.makeText(context, "تم اقتراح نشاط: 'لعبة الأرقام الملونة'", Toast.LENGTH_SHORT).show()));
+        // زر حفظ التحضير
+        layout.addView(UIFactory.createMenuButton(context, "حفظ التحضير في الجهاز", v -> {
+            DatabaseEngine.save(context, "LastLesson", lessonContent);
+            Toast.makeText(context, "تم حفظ التحضير بنجاح", Toast.LENGTH_SHORT).show();
+        }));
 
+        // زر استرجاع التحضير
+        layout.addView(UIFactory.createMenuButton(context, "استرجاع آخر تحضير", v -> {
+            String saved = DatabaseEngine.load(context, "LastLesson");
+            Toast.makeText(context, saved, Toast.LENGTH_LONG).show();
+        }));
+
+        // الربط بالنشاط الرئيسي
         if (context instanceof MainActivity) {
             ((MainActivity) context).setContentView(layout);
         }
