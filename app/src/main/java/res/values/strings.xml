@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">RuqiEduOS MESC</string>
+    <string name="title_activity">النواة التنفيذية الدنيا - مدرسة واحدة</string>
+    <string name="lesson_title">الدرس الأول: الجمع والطرح ضمن العدد ٩</string>
+    <string name="math_question">المسألة: ٥ + ٣ = ٠٠٠</string>
+    <string name="concrete_stage">طَوْر المحسوس (رسومات الشطب البصرية)</string>
+    <string name="kernel_status">حالة النواة: متصلة محليًا (أوفلاين)</string>
+</resources>
