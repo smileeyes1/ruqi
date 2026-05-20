@@ -46,10 +46,10 @@ public class GeminiClient {
 
                 JSONObject jsonResponse = new JSONObject(response);
                 return jsonResponse.getJSONArray("candidates")
-                        .getJSONObject(٠)
+                        .getJSONObject(0)
                         .getJSONObject("content")
                         .getJSONArray("parts")
-                        .getJSONObject(٠)
+                        .getJSONObject(0)
                         .getString("text");
             } else {
                 Log.e(TAG, "Server returned error code: " + responseCode);
