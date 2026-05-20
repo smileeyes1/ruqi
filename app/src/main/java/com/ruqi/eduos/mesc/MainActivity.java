@@ -21,27 +21,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // الحاوية الرئيسية للتطبيق - مظهر داكن عميق
         LinearLayout mainLayout = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setBackgroundColor(Color.parseColor("#0B0F19"));
         mainLayout.setPadding(24, 24, 24, 24);
 
-        // ترويسة التطبيق العلوية الاحترافية (Flexbox/Horizontal Layout)
         LinearLayout headerLayout = new LinearLayout(this);
         headerLayout.setOrientation(LinearLayout.HORIZONTAL);
         headerLayout.setGravity(Gravity.CENTER_VERTICAL);
         headerLayout.setPadding(0, 0, 0, 24);
 
         TextView titleTv = new TextView(this);
-        titleTv.setText("EduOS | مركز القيادة الذكي");
-        titleTv.setTextColor(Color.parseColor("#00F0FF")); // لون سيان نيون
+        titleTv.setText("EduOS | مركز القيادة والتحكم");
+        titleTv.setTextColor(Color.parseColor("#00F0FF"));
         titleTv.setTextSize(20);
         titleTv.setTypeface(null, Typeface.BOLD);
         headerLayout.addView(titleTv);
         mainLayout.addView(headerLayout);
 
-        // منطقة عرض الرسائل (ScrollView)
         scrollView = new ScrollView(this);
         LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, 0, 1.0f);
@@ -55,13 +52,12 @@ public class MainActivity extends AppCompatActivity {
         scrollView.addView(chatHistory);
         mainLayout.addView(scrollView);
 
-        // حاوية الإدخال والإرسال السفلية
         LinearLayout inputContainer = new LinearLayout(this);
         inputContainer.setOrientation(LinearLayout.HORIZONTAL);
         inputContainer.setGravity(Gravity.CENTER_VERTICAL);
 
         final EditText inputField = new EditText(this);
-        inputField.setHint("اكتب ميزتك أو طلبك التعليمي هنا...");
+        inputField.setHint("أدخل الميزة المطلوبة أو الأمر التعليمي...");
         inputField.setHintTextColor(Color.parseColor("#4A5568"));
         inputField.setTextColor(Color.WHITE);
         inputField.setBackgroundColor(Color.parseColor("#1A202C"));
@@ -74,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         Button sendBtn = new Button(this);
         sendBtn.setText("تنفيذ");
         sendBtn.setTextColor(Color.BLACK);
-        sendBtn.setBackgroundColor(Color.parseColor("#00F0FF")); // زر سيان نيون مشع
+        sendBtn.setBackgroundColor(Color.parseColor("#00F0FF"));
         sendBtn.setTypeface(null, Typeface.BOLD);
         sendBtn.setPadding(40, 24, 40, 24);
         inputContainer.addView(sendBtn);
@@ -82,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(mainLayout);
 
-        // رسالة الترحيب الاستهلالية للنظام
-        addMessage("مرحباً بك في EduOS. النظام متصل مباشرة عبر مفتاحك الذكي الثابت وجاهز للتطور التراكمي الفوري.", Gravity.START, "#1E293B", "#00F0FF");
+        addMessage("نظام EduOS جاهز للعمل والأتمتة الكاملة من داخل شاشتك الحالية.", Gravity.START, "#1E293B", "#00F0FF");
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 addMessage(text, Gravity.END, "#00F0FF", "#0B0F19");
                 inputField.setText("");
 
-                addMessage("جاري معالجة وتحديث النظام تلقائياً...", Gravity.START, "#1A202C", "#A0AEC0");
+                addMessage("جاري معالجة الأمر في الخلفية الفورية...", Gravity.START, "#1A202C", "#A0AEC0");
 
                 AIOrchestrator.process(MainActivity.this, text, new AIProcessor.Callback() {
                     @Override
