@@ -21,27 +21,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // الحاوية الرئيسية
         LinearLayout mainLayout = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setBackgroundColor(Color.parseColor("#0B0F19"));
         mainLayout.setPadding(24, 24, 24, 24);
 
-        // الترويسة العلوية
         LinearLayout headerLayout = new LinearLayout(this);
         headerLayout.setOrientation(LinearLayout.HORIZONTAL);
         headerLayout.setGravity(Gravity.CENTER_VERTICAL);
         headerLayout.setPadding(0, 0, 0, 24);
 
         TextView titleTv = new TextView(this);
-        titleTv.setText("EduOS | مركز القيادة");
+        titleTv.setText("EduOS | نظام القيادة الذاتي");
         titleTv.setTextColor(Color.parseColor("#00F0FF"));
         titleTv.setTextSize(20);
         titleTv.setTypeface(null, Typeface.BOLD);
         headerLayout.addView(titleTv);
         mainLayout.addView(headerLayout);
 
-        // منطقة عرض الرسائل (في المنتصف تأخذ المساحة الأكبر)
         scrollView = new ScrollView(this);
         LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, 0, 1.0f);
@@ -55,17 +52,16 @@ public class MainActivity extends AppCompatActivity {
         scrollView.addView(chatHistory);
         mainLayout.addView(scrollView);
 
-        // منطقة الإدخال (في الأسفل لراحة الكتابة)
         LinearLayout inputContainer = new LinearLayout(this);
         inputContainer.setOrientation(LinearLayout.HORIZONTAL);
         inputContainer.setGravity(Gravity.CENTER_VERTICAL);
         inputContainer.setBackgroundColor(Color.parseColor("#0B0F19"));
 
         final EditText inputField = new EditText(this);
-        inputField.setHint("اكتب هنا...");
-        inputField.setHintTextColor(Color.parseColor("#718096")); // لون تلميح واضح
-        inputField.setTextColor(Color.WHITE); // لون نص أبيض ساطع للكتابة
-        inputField.setTextSize(18); // تكبير خط الكتابة
+        inputField.setHint("اكتب أمرك التعليمي هنا للتنفيذ...");
+        inputField.setHintTextColor(Color.parseColor("#718096")); 
+        inputField.setTextColor(Color.WHITE); 
+        inputField.setTextSize(18); 
         inputField.setBackgroundColor(Color.parseColor("#1A202C"));
         inputField.setPadding(32, 32, 32, 32);
         LinearLayout.LayoutParams inputParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
@@ -84,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(mainLayout);
 
-        addMessage("مرحباً بك. تم ضبط الواجهة لتكون مريحة للعين.", Gravity.START, "#1E293B", "#00F0FF");
+        addMessage("نظام المحركات الذاتية النشطة يعمل الآن في الخلفية لتأمين الاتصال الاستباقي.", Gravity.START, "#1E293B", "#00F0FF");
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
                 addMessage("أنت: " + text, Gravity.END, "#00F0FF", "#0B0F19");
                 inputField.setText("");
-                addMessage("جاري المعالجة...", Gravity.START, "#1A202C", "#A0AEC0");
+                addMessage("جاري تأمين الاستجابة الذكية وتخطي العوائق التلقائي...", Gravity.START, "#1A202C", "#A0AEC0");
 
                 AIOrchestrator.process(MainActivity.this, text, new AIProcessor.Callback() {
                     @Override
@@ -115,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         tv.setTextSize(16);
         tv.setTextColor(Color.parseColor(textColor));
         tv.setBackgroundColor(Color.parseColor(bgColor));
-        tv.setPadding(32, 24, 32, 24); // تكبير التوسعة لتكون أسهل للقراءة
+        tv.setPadding(32, 24, 32, 24); 
         
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -124,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
         tv.setLayoutParams(params);
         
         chatHistory.addView(tv);
-        scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.fullScroll(View.FOCUS_DOWN);
+            }
+        });
     }
 }
