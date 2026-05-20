@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout mainLayout = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
-        mainLayout.setPadding(٢٠, ٢٠, ٢٠, ٢٠);
+        mainLayout.setPadding(20, 20, 20, 20);
 
         ScrollView scrollView = new ScrollView(this);
         chatHistory = new LinearLayout(this);
@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
                 AIOrchestrator.process(MainActivity.this, text, new AIProcessor.Callback() {
                     @Override
                     public void onResponse(String result) {
-                        if (chatHistory.getChildCount() > ٠) {
-                            chatHistory.removeViewAt(chatHistory.getChildCount() - ١);
+                        if (chatHistory.getChildCount() > 0) {
+                            chatHistory.removeViewAt(chatHistory.getChildCount() - 1);
                         }
                         addMessage("EduOS: " + result, Gravity.START);
                     }
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mainLayout.addView(scrollView, new LinearLayout.LayoutParams(-١, ٠, ١.٠f));
+        mainLayout.addView(scrollView, new LinearLayout.LayoutParams(-1, 0, 1.0f));
         mainLayout.addView(inputField);
         mainLayout.addView(sendBtn);
 
@@ -65,12 +65,12 @@ public class MainActivity extends AppCompatActivity {
     private void addMessage(String msg, int gravity) {
         TextView tv = new TextView(this);
         tv.setText(msg);
-        tv.setTextSize(١٦);
-        tv.setPadding(١٥, ١٠, ١٥, ١٠);
+        tv.setTextSize(16);
+        tv.setPadding(15, 10, 15, 10);
         
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-٢, -٢);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-2, -2);
         params.gravity = gravity;
-        params.setMargins(٠, ٥, ٠, ٥);
+        params.setMargins(0, 5, 0, 5);
         tv.setLayoutParams(params);
         
         chatHistory.addView(tv);
