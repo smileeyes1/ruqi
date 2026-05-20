@@ -11,29 +11,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CommandRegistry.register(new LessonPlanCommand());
-
+        // بناء الواجهة (Zero XML)
         ScrollView scrollView = new ScrollView(this);
         chatHistory = new LinearLayout(this);
         chatHistory.setOrientation(LinearLayout.VERTICAL);
-        
+        scrollView.addView(chatHistory);
+
         EditText inputField = new EditText(this);
-        inputField.setHint("اكتب طلبك أو قل لي ماذا تريد...");
-        
+        inputField.setHint("اكتب طلبك هنا...");
+
         Button sendBtn = new Button(this);
         sendBtn.setText("تنفيذ");
 
         sendBtn.setOnClickListener(v -> {
             String text = inputField.getText().toString();
+            if (text.isEmpty()) return;
+            
             addMessage("أنت: " + text);
-            SmartDispatcher.dispatch(this, text, this::addMessage);
             inputField.setText("");
+
+            // التواصل المباشر مع الدماغ التعليمي
+            AIOrchestrator.process(this, text, this::addMessage);
         });
 
         LinearLayout mainLayout = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
-        mainLayout.addView(scrollView);
-        scrollView.addView(chatHistory);
+        mainLayout.addView(scrollView, new LinearLayout.LayoutParams(-1, 0, 1.0f));
         mainLayout.addView(inputField);
         mainLayout.addView(sendBtn);
 
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private void addMessage(String msg) {
         TextView tv = new TextView(this);
         tv.setText(msg);
-        tv.setPadding(16, 16, 16, 16);
+        tv.setPadding(20, 20, 20, 20);
         chatHistory.addView(tv);
     }
 }
