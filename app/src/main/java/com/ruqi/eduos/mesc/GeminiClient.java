@@ -11,14 +11,14 @@ import org.json.JSONObject;
 
 public class GeminiClient {
     private static final String TAG = "GeminiClient";
-    // المفتاح محقون وجاهز للعمل بصمت
+    // المفتاح محقون بشكل نهائي
     private static final String API_KEY = "AIzaSyBIj7wLaX8GLwfoNF4-D8HdaRSMEBsAcQ4"; 
 
     public static String sendMessage(String prompt) {
         HttpURLConnection conn = null;
         try {
-            // تفعيل المسار العالمي المستقر (v1/gemini-pro) لضمان تجاوز خطأ 404 نهائياً
-            URL url = new URL("https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=" + API_KEY);
+            // المسار الأحدث والمضمون لتفادي أي 404
+            URL url = new URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + API_KEY);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
@@ -55,20 +55,17 @@ public class GeminiClient {
                         .getJSONObject(0)
                         .getString("text");
             } else {
-                // جلب تفاصيل الرفض بدقة من جوجل في حال وجود حظر
                 InputStream errorStream = conn.getErrorStream();
-                String errorMsg = "";
                 if (errorStream != null) {
                     Scanner scanner = new Scanner(errorStream, "UTF-8");
-                    errorMsg = scanner.useDelimiter("\\A").next();
+                    Log.e(TAG, "Error Details: " + scanner.useDelimiter("\\A").next());
                     scanner.close();
-                    Log.e(TAG, "تفاصيل خطأ الخادم: " + errorMsg);
                 }
-                return "تم صد الاتصال. رمز الخطأ: " + responseCode + " - تأكد من تفعيل (Generative Language API) لمفتاحك.";
+                return "صد الاتصال. تأكد أن مفتاحك مفعل لخدمات (Generative Language API) من منصة جوجل.";
             }
         } catch (Exception e) {
-            Log.e(TAG, "استثناء دفاعي", e);
-            return "فشل الاتصال بالنواة الذكية: " + e.getMessage();
+            Log.e(TAG, "Exception Triggered", e);
+            return "عطل فني في الإرسال: " + e.getMessage();
         } finally {
             if (conn != null) {
                 conn.disconnect();
