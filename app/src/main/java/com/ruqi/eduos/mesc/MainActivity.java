@@ -21,43 +21,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // الحاوية الرئيسية
         LinearLayout mainLayout = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setBackgroundColor(Color.parseColor("#0B0F19"));
         mainLayout.setPadding(24, 24, 24, 24);
 
+        // الترويسة
         LinearLayout headerLayout = new LinearLayout(this);
         headerLayout.setOrientation(LinearLayout.HORIZONTAL);
         headerLayout.setGravity(Gravity.CENTER_VERTICAL);
         headerLayout.setPadding(0, 0, 0, 24);
 
         TextView titleTv = new TextView(this);
-        titleTv.setText("EduOS | مركز القيادة والتحكم");
+        titleTv.setText("EduOS | مركز القيادة");
         titleTv.setTextColor(Color.parseColor("#00F0FF"));
         titleTv.setTextSize(20);
         titleTv.setTypeface(null, Typeface.BOLD);
         headerLayout.addView(titleTv);
         mainLayout.addView(headerLayout);
 
-        scrollView = new ScrollView(this);
-        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1.0f);
-        scrollParams.setMargins(0, 0, 0, 24);
-        scrollView.setLayoutParams(scrollParams);
-        scrollView.setFillViewport(true);
-
-        chatHistory = new LinearLayout(this);
-        chatHistory.setOrientation(LinearLayout.VERTICAL);
-        chatHistory.setGravity(Gravity.BOTTOM);
-        scrollView.addView(chatHistory);
-        mainLayout.addView(scrollView);
-
+        // منطقة الإدخال (تم نقلها للأعلى أسفل الترويسة مباشرة)
         LinearLayout inputContainer = new LinearLayout(this);
         inputContainer.setOrientation(LinearLayout.HORIZONTAL);
         inputContainer.setGravity(Gravity.CENTER_VERTICAL);
+        inputContainer.setPadding(0, 0, 0, 24);
 
         final EditText inputField = new EditText(this);
-        inputField.setHint("أدخل الميزة المطلوبة أو الأمر التعليمي...");
+        inputField.setHint("أدخل الأمر التعليمي هنا...");
         inputField.setHintTextColor(Color.parseColor("#4A5568"));
         inputField.setTextColor(Color.WHITE);
         inputField.setBackgroundColor(Color.parseColor("#1A202C"));
@@ -76,9 +67,22 @@ public class MainActivity extends AppCompatActivity {
         inputContainer.addView(sendBtn);
         mainLayout.addView(inputContainer);
 
+        // منطقة عرض الرسائل (تم نقلها للأسفل وتأخذ باقي المساحة)
+        scrollView = new ScrollView(this);
+        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1.0f);
+        scrollView.setLayoutParams(scrollParams);
+        scrollView.setFillViewport(true);
+
+        chatHistory = new LinearLayout(this);
+        chatHistory.setOrientation(LinearLayout.VERTICAL);
+        chatHistory.setGravity(Gravity.TOP); // الرسائل تبدأ من الأعلى للأسفل
+        scrollView.addView(chatHistory);
+        mainLayout.addView(scrollView);
+
         setContentView(mainLayout);
 
-        addMessage("نظام EduOS جاهز للعمل والأتمتة الكاملة من داخل شاشتك الحالية.", Gravity.START, "#1E293B", "#00F0FF");
+        addMessage("تم نقل وحدة التحكم للأعلى. النظام متصل وجاهز.", Gravity.START, "#1E293B", "#00F0FF");
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,10 +90,9 @@ public class MainActivity extends AppCompatActivity {
                 final String text = inputField.getText().toString().trim();
                 if (text.isEmpty()) return;
 
-                addMessage(text, Gravity.END, "#00F0FF", "#0B0F19");
+                addMessage("أنت: " + text, Gravity.END, "#00F0FF", "#0B0F19");
                 inputField.setText("");
-
-                addMessage("جاري معالجة الأمر في الخلفية الفورية...", Gravity.START, "#1A202C", "#A0AEC0");
+                addMessage("جاري المعالجة...", Gravity.START, "#1A202C", "#A0AEC0");
 
                 AIOrchestrator.process(MainActivity.this, text, new AIProcessor.Callback() {
                     @Override
@@ -119,11 +122,6 @@ public class MainActivity extends AppCompatActivity {
         tv.setLayoutParams(params);
         
         chatHistory.addView(tv);
-        scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.fullScroll(View.FOCUS_DOWN);
-            }
-        });
+        scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
     }
 }
