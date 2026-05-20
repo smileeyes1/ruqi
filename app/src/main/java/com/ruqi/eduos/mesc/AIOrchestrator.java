@@ -10,8 +10,8 @@ public class AIOrchestrator {
     
     private static final String SYSTEM_BRAIN = 
         "أنت نظام EduOS الذكي المطور للمنهاج الفلسطيني. " +
-        "التزم بالتدرج التربوي الحاسم: المحسوس (أمثلة مرئية) -> شبه المحسوس (مسائل لفظية) -> المجرد (رموز وعمليات). " +
-        "استخدم الأرقام المشرقية ٠١٢٣٤٥٦٧٨٩ حصرياً في كافة جداولك ومخرجاتك واجعل المتن نظيفاً تماماً وجاهزاً لاستخدام الطلاب مباشرة.";
+        "التزم بالتدرج التربوي الحاسم: المحسوس -> شبه المحسوس -> المجرد. " +
+        "استخدم الأرقام المشرقية ٠١٢٣٤٥٦٧٨٩ حصرياً في مخرجاتك واجعل المتن نظيفاً تماماً للطلاب.";
 
     public static void process(final Context context, final String prompt, final AIProcessor.Callback callback) {
         if (context == null || callback == null) return;
@@ -24,25 +24,35 @@ public class AIOrchestrator {
                 String finalResult = "";
                 boolean success = false;
 
-                // المحاولة الأولى: نظام جيميناي المستقر
+                // المحاولة الأولى: Gemini
                 try {
-                    Log.d(TAG, "جاري تجربة المحرك الأول: Gemini...");
+                    Log.d(TAG, "تنشيط المحرك الأول: Gemini...");
                     finalResult = GeminiClient.sendMessage(fullPrompt);
                     success = true;
                 } catch (Exception e) {
-                    Log.e(TAG, "فشل المحرك الأول، الانتقال التلقائي الفوري لتأمين الاستجابة...", e);
+                    Log.e(TAG, "فشل محرك جيميناي، جاري التبديل التلقائي الفوري...", e);
                 }
 
-                // المحاولة الثانية التلقائية: (يمكنك تفعيل كود Groq أو حاقن بديل هنا عند الرغبة)
+                // المحاولة الثانية: Groq
                 if (!success) {
                     try {
-                        Log.d(TAG, "جاري تشغيل المحرك الاحتياطي التلقائي...");
-                        // في حال تعطل الأول، يرجع التطبيق هنا برسالة دفاعية ذكية أو يعيد المحاولة بمسار بديل لضمان الثبات
-                        finalResult = GeminiClient.sendMessage(fullPrompt); // إعادة محاولة حركية دفاعية
+                        Log.d(TAG, "تنشيط المحرك البديل: Groq...");
+                        finalResult = GroqClient.sendMessage(fullPrompt);
                         success = true;
-                    } catch (Exception ex) {
-                        Log.e(TAG, "فشل مسار المحاولات التلقائية بالكامل", ex);
-                        finalResult = "النظام الذكي يواجه قيود اتصال إقليمية حالياً. يرجى التحقق من تحديث مفتاحك عبر لوحة التحكم.";
+                    } catch (Exception e) {
+                        Log.e(TAG, "فشل محرك غروك، جاري الانتقال لخط الدفاع النهائي...", e);
+                    }
+                }
+
+                // المحاولة الثالثة: OpenAI ChatGPT
+                if (!success) {
+                    try {
+                        Log.d(TAG, "تنشيط المحرك النهائي: OpenAI...");
+                        finalResult = OpenAIClient.sendMessage(fullPrompt);
+                        success = true;
+                    } catch (Exception e) {
+                        Log.e(TAG, "فشل جميع المحركات الذكية", e);
+                        finalResult = "تم صد الاتصال من جميع المحركات. يرجى التحقق من صحة الأسرار وحالة الشبكة.";
                     }
                 }
 
