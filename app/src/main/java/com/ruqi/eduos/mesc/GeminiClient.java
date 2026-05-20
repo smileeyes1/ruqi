@@ -11,13 +11,13 @@ import org.json.JSONObject;
 
 public class GeminiClient {
     private static final String TAG = "GeminiClient";
-    // المفتاح محقون بشكل نهائي
-    private static final String API_KEY = "AIzaSyBIj7wLaX8GLwfoNF4-D8HdaRSMEBsAcQ4"; 
+    
+    // ضع المفتاح الجديد الذي ستستخرجه من جوجل بين علامتي التنصيص
+    private static final String API_KEY = "AIzaSyBtKrfjHO8AAAa0acflO19OKz2e7U0urTY"; 
 
     public static String sendMessage(String prompt) {
         HttpURLConnection conn = null;
         try {
-            // المسار الأحدث والمضمون لتفادي أي 404
             URL url = new URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + API_KEY);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -58,10 +58,10 @@ public class GeminiClient {
                 InputStream errorStream = conn.getErrorStream();
                 if (errorStream != null) {
                     Scanner scanner = new Scanner(errorStream, "UTF-8");
-                    Log.e(TAG, "Error Details: " + scanner.useDelimiter("\\A").next());
+                    Log.e(TAG, "Error: " + scanner.useDelimiter("\\A").next());
                     scanner.close();
                 }
-                return "صد الاتصال. تأكد أن مفتاحك مفعل لخدمات (Generative Language API) من منصة جوجل.";
+                return "تم صد الاتصال من جوجل. يرجى التأكد من وضع مفتاح جديد وصالح في الكود.";
             }
         } catch (Exception e) {
             Log.e(TAG, "Exception Triggered", e);
