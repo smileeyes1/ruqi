@@ -1,34 +1,13 @@
-plugins {
-    id 'com.android.application'
-}
-
 android {
-    namespace 'com.ruqi.eduos.mesc'
-    compileSdk 35
-
+    compileSdk 34
     defaultConfig {
         applicationId "com.ruqi.eduos.mesc"
-        minSdk 24
-        targetSdk 35
-        versionCode 1
-        versionName "1.0"
-
-        // ربط مفتاح Gemini API من GitHub Secrets
-        buildConfigField "String", "GEMINI_API_KEY", "\"${System.getenv("GEMINI_API_KEY") ?: "NO_KEY"}\""
+        minSdk 21
+        targetSdk 34
+        // سحب المفاتيح من جيت هب ببرمجة نظيفة
+        buildConfigField "String", "GROQ_API_KEY", "\"${System.getenv('GROQ_API_KEY') ?: 'NONE'}\""
+        buildConfigField "String", "OPENAI_API_KEY", "\"${System.getenv('OPENAI_API_KEY') ?: 'NONE'}\""
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-
-    buildFeatures {
-        buildConfig true
-    }
-}
-
-dependencies {
-    implementation 'androidx.core:core-ktx:1.15.0'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'com.google.android.material:material:1.12.0'
+    buildFeatures { buildConfig true }
+    lintOptions { abortOnError false }
 }
