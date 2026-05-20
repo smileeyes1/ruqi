@@ -10,8 +10,7 @@ import org.json.JSONObject;
 
 public class GeminiClient {
     private static final String TAG = "GeminiClient";
-    // تم ربط وتثبيت المفتاح الحاسم مباشرة ليعمل التطبيق بشكل مستقل
-    private static final String API_KEY = "AIzaSyD" + "Your_Actual_Key_Here_Rest_Of_Key"; 
+    private static final String API_KEY = "AIzaSyBIj7wLaX8GLwfoNF4-D8HdaRSMEBsAcQ4"; 
 
     public static String sendMessage(String prompt) {
         HttpURLConnection conn = null;
@@ -54,11 +53,11 @@ public class GeminiClient {
                         .getString("text");
             } else {
                 Log.e(TAG, "Server Error Code: " + responseCode);
-                return "خطأ في استجابة الخادم الخارجي: " + responseCode;
+                return "خطأ في استجابة نظام القيادة الخارجي: " + responseCode;
             }
         } catch (Exception e) {
             Log.e(TAG, "Defensive Exception Triggered", e);
-            return "فشل الاتصال الذكي: " + e.getMessage();
+            return "فشل الاتصال النواة الذكية: " + e.getMessage();
         } finally {
             if (conn != null) {
                 conn.disconnect();
