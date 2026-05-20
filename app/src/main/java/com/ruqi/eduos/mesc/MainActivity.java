@@ -6,11 +6,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,116 +16,47 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LinearLayout main = new LinearLayout(this);
+        main.setOrientation(LinearLayout.VERTICAL);
+        main.setBackgroundColor(Color.parseColor("#0B0F19"));
+        main.setPadding(24, 24, 24, 24);
 
-        // الحاوية الرئيسية للتطبيق
-        LinearLayout mainLayout = new LinearLayout(this);
-        mainLayout.setOrientation(LinearLayout.VERTICAL);
-        mainLayout.setBackgroundColor(Color.parseColor("#0B0F19"));
-        mainLayout.setPadding(24, 24, 24, 24);
-
-        // الترويسة العلوية للمركز
-        LinearLayout headerLayout = new LinearLayout(this);
-        headerLayout.setOrientation(LinearLayout.HORIZONTAL);
-        headerLayout.setGravity(Gravity.CENTER_VERTICAL);
-        headerLayout.setPadding(0, 0, 0, 24);
-
-        TextView titleTv = new TextView(this);
-        titleTv.setText("EduOS | مركز القيادة والتحكم");
-        titleTv.setTextColor(Color.parseColor("#00F0FF"));
-        titleTv.setTextSize(20);
-        titleTv.setTypeface(null, Typeface.BOLD);
-        headerLayout.addView(titleTv);
-        mainLayout.addView(headerLayout);
-
-        // منطقة عرض الرسائل وحوار الحوار
         scrollView = new ScrollView(this);
-        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1.0f);
-        scrollParams.setMargins(0, 0, 0, 24);
-        scrollView.setLayoutParams(scrollParams);
-        scrollView.setFillViewport(true);
-
+        scrollView.setLayoutParams(new LinearLayout.LayoutParams(-1, 0, 1.0f));
         chatHistory = new LinearLayout(this);
         chatHistory.setOrientation(LinearLayout.VERTICAL);
-        chatHistory.setGravity(Gravity.BOTTOM); 
         scrollView.addView(chatHistory);
-        mainLayout.addView(scrollView);
+        main.addView(scrollView);
 
-        // حاوية الإدخال والإرسال السفلية المريحة
-        LinearLayout inputContainer = new LinearLayout(this);
-        inputContainer.setOrientation(LinearLayout.HORIZONTAL);
-        inputContainer.setGravity(Gravity.CENTER_VERTICAL);
-        inputContainer.setBackgroundColor(Color.parseColor("#0B0F19"));
+        LinearLayout inputCont = new LinearLayout(this);
+        EditText input = new EditText(this);
+        input.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1.0f));
+        input.setHint("اكتب أمرك هنا...");
+        input.setTextColor(Color.WHITE);
+        inputCont.addView(input);
 
-        final EditText inputField = new EditText(this);
-        inputField.setHint("أدخل الميزة المطلوبة أو الأمر التعليمي...");
-        inputField.setHintTextColor(Color.parseColor("#718096")); 
-        inputField.setTextColor(Color.WHITE); 
-        inputField.setTextSize(18); 
-        inputField.setBackgroundColor(Color.parseColor("#1A202C"));
-        inputField.setPadding(32, 32, 32, 32);
-        LinearLayout.LayoutParams inputParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
-        inputParams.setMargins(0, 0, 16, 0);
-        inputField.setLayoutParams(inputParams);
-        inputContainer.addView(inputField);
+        Button btn = new Button(this);
+        btn.setText("إرسال");
+        inputCont.addView(btn);
+        main.addView(inputCont);
+        setContentView(main);
 
-        Button sendBtn = new Button(this);
-        sendBtn.setText("تنفيذ");
-        sendBtn.setTextColor(Color.BLACK);
-        sendBtn.setBackgroundColor(Color.parseColor("#00F0FF"));
-        sendBtn.setTypeface(null, Typeface.BOLD);
-        sendBtn.setPadding(40, 24, 40, 24);
-        inputContainer.addView(sendBtn);
-        mainLayout.addView(inputContainer);
-
-        setContentView(mainLayout);
-
-        // الرسالة الترحيبية الافتتاحية للنظام
-        addMessage("نظام EduOS جاهز للعمل والأتمتة الكاملة من داخل شاشتك الحالية.", Gravity.START, "#1E293B", "#00F0FF");
-
-        sendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String text = inputField.getText().toString().trim();
-                if (text.isEmpty()) return;
-
-                addMessage("أنت: " + text, Gravity.END, "#00F0FF", "#0B0F19");
-                inputField.setText("");
-                addMessage("جاري معالجة الأمر والتبديل التلقائي الذكي بين المحركات الفعالة...", Gravity.START, "#1A202C", "#A0AEC0");
-
-                AIOrchestrator.process(MainActivity.this, text, new AIProcessor.Callback() {
-                    @Override
-                    public void onResponse(String result) {
-                        if (chatHistory.getChildCount() > 0) {
-                            chatHistory.removeViewAt(chatHistory.getChildCount() - 1);
-                        }
-                        addMessage(result, Gravity.START, "#1E293B", "#FFFFFF");
-                    }
-                });
-            }
+        btn.setOnClickListener(v -> {
+            String text = input.getText().toString();
+            addMsg("أنت: " + text, Gravity.END);
+            AIOrchestrator.process(this, text, res -> addMsg("النظام: " + res, Gravity.START));
+            input.setText("");
         });
     }
 
-    private void addMessage(String msg, int gravity, String bgColor, String textColor) {
+    private void addMsg(String msg, int g) {
         TextView tv = new TextView(this);
         tv.setText(msg);
-        tv.setTextSize(16);
-        tv.setTextColor(Color.parseColor(textColor));
-        tv.setBackgroundColor(Color.parseColor(bgColor));
-        tv.setPadding(32, 24, 32, 24); 
-        
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = gravity;
-        params.setMargins(0, 12, 0, 12);
-        tv.setLayoutParams(params);
-        
+        tv.setTextColor(Color.WHITE);
+        tv.setPadding(24, 24, 24, 24);
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-2, -2);
+        p.gravity = g;
+        tv.setLayoutParams(p);
         chatHistory.addView(tv);
-        scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.fullScroll(View.FOCUS_DOWN);
-            }
-        });
     }
 }
