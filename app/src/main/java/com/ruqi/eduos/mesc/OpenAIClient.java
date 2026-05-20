@@ -12,7 +12,7 @@ import org.json.JSONObject;
 public class OpenAIClient {
     private static final String TAG = "OpenAIClient";
     // ضع مفتاح OpenAI (ChatGPT) الخاص بك هنا
-    private static final String API_KEY = "ضع_مفتاح_openai_هنا"; 
+    private static final String API_KEY = "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"; 
 
     public static String sendMessage(String prompt) {
         HttpURLConnection conn = null;
