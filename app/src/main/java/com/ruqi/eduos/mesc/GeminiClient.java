@@ -1,7 +1,6 @@
 package com.ruqi.eduos.mesc;
 
 import android.util.Log;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -11,11 +10,9 @@ import org.json.JSONObject;
 
 public class GeminiClient {
     private static final String TAG = "GeminiClient";
-    
-    // ضع المفتاح الجديد الذي ستستخرجه من جوجل بين علامتي التنصيص
-    private static final String API_KEY = "AIzaSyBtKrfjHO8AAAa0acflO19OKz2e7U0urTY"; 
+    private static final String API_KEY = "AIzaSyBIj7wLaX8GLwfoNF4-D8HdaRSMEBsAcQ4"; 
 
-    public static String sendMessage(String prompt) {
+    public static String sendMessage(String prompt) throws Exception {
         HttpURLConnection conn = null;
         try {
             URL url = new URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + API_KEY);
@@ -23,6 +20,8 @@ public class GeminiClient {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoOutput(true);
+            conn.setConnectTimeout(6000);
+            conn.setReadTimeout(6000);
 
             JSONObject jsonBody = new JSONObject();
             JSONArray contents = new JSONArray();
@@ -55,21 +54,10 @@ public class GeminiClient {
                         .getJSONObject(0)
                         .getString("text");
             } else {
-                InputStream errorStream = conn.getErrorStream();
-                if (errorStream != null) {
-                    Scanner scanner = new Scanner(errorStream, "UTF-8");
-                    Log.e(TAG, "Error: " + scanner.useDelimiter("\\A").next());
-                    scanner.close();
-                }
-                return "تم صد الاتصال من جوجل. يرجى التأكد من وضع مفتاح جديد وصالح في الكود.";
+                throw new Exception("Gemini HTTP Error: " + responseCode);
             }
-        } catch (Exception e) {
-            Log.e(TAG, "Exception Triggered", e);
-            return "عطل فني في الإرسال: " + e.getMessage();
         } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
+            if (conn != null) conn.disconnect();
         }
     }
 }
