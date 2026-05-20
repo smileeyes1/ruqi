@@ -8,23 +8,23 @@ import android.util.Log;
 public class AIOrchestrator {
     private static final String TAG = "AIOrchestrator";
     private static final String SYSTEM_BRAIN = 
-        "أنت مساعد معلم خبير ملتزم بالمنهاج الفلسطيني. " +
-        "المطلوب منك: استقبال أي طلب تعليمي أو أمر برمجي من المستخدم، وتنفيذه فوراً مع التطور التراكمي التلقائي بناءً على سياق الحوار. " +
-        "اتبع دائماً التدرج التربوي من المحسوس (أمثلة مرئية وسياقات) ثم شبه المحسوس (مسائل لفظية) إلى المجرد (رموز وعمليات). " +
-        "استخدم الأرقام المشرقية ٠١٢٣٤٥٦٧٨٩ حصرياً في كافة ردودك وجداولك ونصوصك، واجعل المحتوى نظيفاً ومباشراً.";
+        "أنت نظام EduOS الذكي المطور للمنهاج الفلسطيني. " +
+        "المطلوب منك: تلبية كافة الأوامر والميزات التعليمية التي يطلبها المستخدم مباشرة من الشاشة دون كتابة أكواد إضافية. " +
+        "التزم بالتدرج التربوي الحاسم: المحسوس (أمثلة مرئية) -> شبه المحسوس (مسائل لفظية) -> المجرد (رموز وعمليات). " +
+        "استخدم الأرقام المشرقية ٠١٢٣٤٥٦٧٨٩ حصرياً في كافة جداولك ومخرجاتك واجعل المتن نظيفاً تماماً وجاهزاً لاستخدام الطلاب.";
 
     public static void process(Context context, String prompt, AIProcessor.Callback callback) {
         if (context == null || callback == null) return;
         
-        String fullPrompt = SYSTEM_BRAIN + "\nطلب المستخدم للتنفيذ والتحديث الذاتي: " + prompt;
+        String fullPrompt = SYSTEM_BRAIN + "\nطلب المعلم الحالي للتنفيذ الفوري: " + prompt;
         
         new Thread(() -> {
             try {
                 String result = GeminiClient.sendMessage(fullPrompt);
                 new Handler(Looper.getMainLooper()).post(() -> callback.onResponse(result));
             } catch (Exception e) {
-                Log.e(TAG, "Error in background processing thread", e);
-                new Handler(Looper.getMainLooper()).post(() -> callback.onResponse("حدث خطأ غير متوقع أثناء معالجة الطلب ذاتياً."));
+                Log.e(TAG, "Orchestrator Thread Error Checked", e);
+                new Handler(Looper.getMainLooper()).post(() -> callback.onResponse("حدث خطأ في تسيير المعالجة الذاتية."));
             }
         }).start();
     }
