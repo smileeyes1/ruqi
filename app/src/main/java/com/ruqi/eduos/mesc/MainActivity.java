@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         mainLayout.setBackgroundColor(Color.parseColor("#0B0F19"));
         mainLayout.setPadding(24, 24, 24, 24);
 
-        // الترويسة
+        // الترويسة العلوية
         LinearLayout headerLayout = new LinearLayout(this);
         headerLayout.setOrientation(LinearLayout.HORIZONTAL);
         headerLayout.setGravity(Gravity.CENTER_VERTICAL);
@@ -41,25 +41,40 @@ public class MainActivity extends AppCompatActivity {
         headerLayout.addView(titleTv);
         mainLayout.addView(headerLayout);
 
-        // منطقة الإدخال (تم نقلها للأعلى أسفل الترويسة مباشرة)
+        // منطقة عرض الرسائل (في المنتصف تأخذ المساحة الأكبر)
+        scrollView = new ScrollView(this);
+        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1.0f);
+        scrollParams.setMargins(0, 0, 0, 24);
+        scrollView.setLayoutParams(scrollParams);
+        scrollView.setFillViewport(true);
+
+        chatHistory = new LinearLayout(this);
+        chatHistory.setOrientation(LinearLayout.VERTICAL);
+        chatHistory.setGravity(Gravity.BOTTOM); 
+        scrollView.addView(chatHistory);
+        mainLayout.addView(scrollView);
+
+        // منطقة الإدخال (في الأسفل لراحة الكتابة)
         LinearLayout inputContainer = new LinearLayout(this);
         inputContainer.setOrientation(LinearLayout.HORIZONTAL);
         inputContainer.setGravity(Gravity.CENTER_VERTICAL);
-        inputContainer.setPadding(0, 0, 0, 24);
+        inputContainer.setBackgroundColor(Color.parseColor("#0B0F19"));
 
         final EditText inputField = new EditText(this);
-        inputField.setHint("أدخل الأمر التعليمي هنا...");
-        inputField.setHintTextColor(Color.parseColor("#4A5568"));
-        inputField.setTextColor(Color.WHITE);
+        inputField.setHint("اكتب هنا...");
+        inputField.setHintTextColor(Color.parseColor("#718096")); // لون تلميح واضح
+        inputField.setTextColor(Color.WHITE); // لون نص أبيض ساطع للكتابة
+        inputField.setTextSize(18); // تكبير خط الكتابة
         inputField.setBackgroundColor(Color.parseColor("#1A202C"));
-        inputField.setPadding(32, 24, 32, 24);
+        inputField.setPadding(32, 32, 32, 32);
         LinearLayout.LayoutParams inputParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
         inputParams.setMargins(0, 0, 16, 0);
         inputField.setLayoutParams(inputParams);
         inputContainer.addView(inputField);
 
         Button sendBtn = new Button(this);
-        sendBtn.setText("تنفيذ");
+        sendBtn.setText("إرسال");
         sendBtn.setTextColor(Color.BLACK);
         sendBtn.setBackgroundColor(Color.parseColor("#00F0FF"));
         sendBtn.setTypeface(null, Typeface.BOLD);
@@ -67,22 +82,9 @@ public class MainActivity extends AppCompatActivity {
         inputContainer.addView(sendBtn);
         mainLayout.addView(inputContainer);
 
-        // منطقة عرض الرسائل (تم نقلها للأسفل وتأخذ باقي المساحة)
-        scrollView = new ScrollView(this);
-        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1.0f);
-        scrollView.setLayoutParams(scrollParams);
-        scrollView.setFillViewport(true);
-
-        chatHistory = new LinearLayout(this);
-        chatHistory.setOrientation(LinearLayout.VERTICAL);
-        chatHistory.setGravity(Gravity.TOP); // الرسائل تبدأ من الأعلى للأسفل
-        scrollView.addView(chatHistory);
-        mainLayout.addView(scrollView);
-
         setContentView(mainLayout);
 
-        addMessage("تم نقل وحدة التحكم للأعلى. النظام متصل وجاهز.", Gravity.START, "#1E293B", "#00F0FF");
+        addMessage("مرحباً بك. تم ضبط الواجهة لتكون مريحة للعين.", Gravity.START, "#1E293B", "#00F0FF");
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         tv.setTextSize(16);
         tv.setTextColor(Color.parseColor(textColor));
         tv.setBackgroundColor(Color.parseColor(bgColor));
-        tv.setPadding(24, 16, 24, 16);
+        tv.setPadding(32, 24, 32, 24); // تكبير التوسعة لتكون أسهل للقراءة
         
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
