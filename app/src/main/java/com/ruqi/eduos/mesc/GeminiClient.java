@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class GeminiClient {
+    private static final String TAG = "GeminiClient";
     private static final String API_KEY = "YOUR_GEMINI_API_KEY_HERE"; 
 
     public static String sendMessage(String prompt) {
@@ -45,17 +46,18 @@ public class GeminiClient {
 
                 JSONObject jsonResponse = new JSONObject(response);
                 return jsonResponse.getJSONArray("candidates")
-                        .getJSONObject(0)
+                        .getJSONObject(٠)
                         .getJSONObject("content")
                         .getJSONArray("parts")
-                        .getJSONObject(0)
+                        .getJSONObject(٠)
                         .getString("text");
             } else {
-                return "خطأ في استجابة الخادم: " + responseCode;
+                Log.e(TAG, "Server returned error code: " + responseCode);
+                return "خطأ في استجابة الخادم الخارجي: " + responseCode;
             }
         } catch (Exception e) {
-            Log.e("GeminiClient", "خطأ أثناء الاتصال بالذكاء الاصطناعي", e);
-            return "فشل الاتصال الذكي: " + e.getMessage();
+            Log.e(TAG, "Exception during API communication", e);
+            return "فشل الاتصال الخارجي: " + e.getMessage();
         } finally {
             if (conn != null) {
                 conn.disconnect();
